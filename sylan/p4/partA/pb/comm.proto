@@ -1,0 +1,141 @@
+syntax = "proto3";
+package pb;
+
+// protoc --go_out=plugins=grpc:. *.proto
+
+// Specifies the message type in a peer request and reply
+enum MsgType {
+    PREACCEPT = 0;
+    PREACCEPTREPLY = 1;
+    ACCEPT = 2;
+    ACCEPTREPLY = 3;
+    COMMIT = 4;
+    COMMITREPLY = 5;
+    PROPOSE  = 6;
+    EXITREPLY = 8;
+}
+
+// instance state
+enum InstState {
+    PREACCEPTED = 0;
+    ACCEPTED = 2;
+    EXECUTED = 3;
+}
+
+service Replica {
+    rpc Propose (ProposeRequest) returns (ProposeReply) {}
+    rpc Dispatch (stream PeerRequest) returns (stream PeerRequest) {}
+}
+
+// A wrapper message that can contain one of the request message types.
+message PeerRequest {
+    MsgType Type = 1;     // The type of the request
+    int64 From = 2; // Replica ID
+
+    // only one of these fields can be set, and the field that is set should
+    // match the message type described above.
+    oneof message {
+        PreacceptRequest preaccept = 10;
+        PreacceptReply preacceptreply = 11;
+        AcceptRequest accept = 12;
+        AcceptReply acceptreply = 13;
+        CommitRequest commit = 14;
+    }
+}
+
+message PreacceptRequest {
+    Instance			Inst = 1;
+}
+
+message PreacceptReply {
+    int64			Seq = 1;
+    int64			Slot = 2;
+    repeated int64		Deps = 3;
+    bool 			Changed = 4;
+}
+
+message AcceptRequest {
+    Instance			Inst = 1;
+}
+
+message AcceptReply {
+    int64			Slot = 1;
+    
+}
+
+message CommitRequest {
+    Instance			Inst = 1;
+}
+
+//=====================================================================
+
+message Instance {
+    int64			Rep = 1;   
+    int64			Slot = 2;   
+    int64			Seq = 5;
+    repeated int64		Deps = 6;
+    InstState			State = 7;
+    int32			Acks = 8;
+    bool			Changed = 9;
+    int64			Visited = 10;
+    repeated Operation		Ops = 11;
+}
+
+message Operation {
+    AccessType			Type = 1;
+    string 			Key = 2;
+    bytes			Value = 3;
+    string			Identity = 4;
+}    
+
+//=====================================================================
+
+
+// access types from client
+enum AccessType {
+    ACCESS_WRITE = 0;
+    ACCESS_READ = 1;
+    ACCESS_WRITEREAD = 2;
+    ACCESS_NULL = 3;
+}
+
+message ProposeRequest {
+    Operation 	Op = 1;
+    string	Identity = 2;
+}
+
+message ProposeReply {
+    int64	Slot = 1;
+    string	Value = 2;
+}
+
+
+message WriteRequest {
+    string	Key = 1;
+    bytes 	Value = 2;
+}
+
+message WriteReply {
+}
+
+message WriteReadRequest {
+    string	Key = 1;
+    bytes 	Value = 2;
+}
+
+message WriteReadReply {
+    string 		Key = 1;
+    bytes 		Value = 2;
+}
+
+message ReadRequest {
+    string 		Key = 1;
+    bytes 		Value = 2;
+}
+
+message ReadReply {
+    string 		Key = 1;
+    bytes 		Value = 2;
+}
+
+

@@ -1,0 +1,11 @@
+=============== Oct 25, 2018 (EDT) ===============
+16:52:39.132586 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+16:52:39.133248 db@open opening
+16:52:39.133837 version@stat F·[] S·0B[] Sc·[]
+16:52:39.134025 db@janitor F·2 G·0
+16:52:39.134057 db@open done T·792.161µs
+16:52:52.279892 memdb@flush N·1124 S·3MiB
+16:52:52.299070 memdb@flush created L0@3 N·1124 S·2MiB "+8l..cA=,v441":"zy6..x8=,v588"
+16:52:52.299122 version@stat F·[1] S·2MiB[2MiB] Sc·[0.25]
+16:52:52.299266 memdb@flush committed F·1 T·19.330156ms
+16:52:52.299661 journal@remove removed @1

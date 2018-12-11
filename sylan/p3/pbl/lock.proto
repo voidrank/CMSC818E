@@ -1,0 +1,45 @@
+
+syntax = "proto3";
+
+// protoc --go_out=plugins=grpc:. *.proto
+ 
+package pbl;
+
+
+enum LockType {
+    SHARED = 0;
+    EXCLUSIVE = 1;
+}
+
+
+service Lock {
+    rpc Acquire (LockAcquireRequest) returns (LockAcquireReply) {}
+    rpc Release (LockReleaseRequest) returns (LockReleaseReply) {}
+}
+
+message LockAcquireRequest {
+    string 		Path = 1;
+    LockType 		Mode = 2;
+    int64 		RepID = 3; 
+}
+
+message LockAcquireReply {
+    string 		Path = 1;
+    LockType 		Mode = 2;
+    int64 		RepID = 3; 
+}
+
+// add requisite structures
+
+message LockReleaseRequest {
+    string    Path = 1;
+    LockType  Mode = 2;
+    int64     RepID = 3;
+}
+
+message LockReleaseReply {
+    string   Path = 1;
+    LockType Mode = 2;
+    int64    RepID = 3;
+}
+

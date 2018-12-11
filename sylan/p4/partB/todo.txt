@@ -1,0 +1,11 @@
+
+- some state in bigDispatcher (# accepts acks)
+- get rid of identity in client proposal
+- for picture
+  - add other replica, streams
+  - outchannel/go thread/stream
+  - show all threads needed
+- mention Instance / Op
+- channels thread-safe
+- change execute to run through bigchannel  (no locking)
+- in talk, put up paper pseudo-code and picture side-by-side
